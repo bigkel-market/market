@@ -8,10 +8,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.Query;
 
-import com.itchenyang.market.product.dao.FlywaySchemaHistoryDao;
-import com.itchenyang.market.product.entity.FlywaySchemaHistoryEntity;
-import com.itchenyang.market.product.service.FlywaySchemaHistoryService;
-
 
 @Service("flywaySchemaHistoryService")
 public class FlywaySchemaHistoryServiceImpl extends ServiceImpl<FlywaySchemaHistoryDao, FlywaySchemaHistoryEntity> implements FlywaySchemaHistoryService {
