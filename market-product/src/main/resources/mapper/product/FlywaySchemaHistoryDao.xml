@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itchenyang.market.product.dao.FlywaySchemaHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.itchenyang.market.product.entity.FlywaySchemaHistoryEntity" id="flywaySchemaHistoryMap">
+        <result property="installedRank" column="installed_rank"/>
+        <result property="version" column="version"/>
+        <result property="description" column="description"/>
+        <result property="type" column="type"/>
+        <result property="script" column="script"/>
+        <result property="checksum" column="checksum"/>
+        <result property="installedBy" column="installed_by"/>
+        <result property="installedOn" column="installed_on"/>
+        <result property="executionTime" column="execution_time"/>
+        <result property="success" column="success"/>
+    </resultMap>
+
+
+</mapper>
