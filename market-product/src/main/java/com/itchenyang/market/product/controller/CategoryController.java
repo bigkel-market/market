@@ -1,6 +1,7 @@
 package com.itchenyang.market.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,15 @@ import com.itchenyang.common.utils.R;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    /**
+     * 以树形结构获取所有数据
+     */
+    @RequestMapping("/list/tree")
+    public R listWithTree() {
+        List<CategoryEntity> result = categoryService.selectByTree();
+        return R.ok().put("data", result);
+    }
 
     /**
      * 列表
