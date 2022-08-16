@@ -21,16 +21,6 @@ import com.itchenyang.market.product.service.CategoryService;
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params) {
-        IPage<CategoryEntity> page = this.page(
-                new Query<CategoryEntity>().getPage(params),
-                new QueryWrapper<CategoryEntity>()
-        );
-
-        return new PageUtils(page);
-    }
-
-    @Override
     public List<CategoryEntity> selectByTree() {
         List<CategoryEntity> all = baseMapper.selectList(null);
         // 找出第一层级
@@ -45,6 +35,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 })
                 .collect(Collectors.toList());
         return treeList;
+    }
+
+    @Override
+    public void removeMenuByIds(List<Long> ids) {
+        // todo 判断是否允许被删除
+
+        baseMapper.deleteBatchIds(ids);
     }
 
     public List<CategoryEntity> getChildren(CategoryEntity cur, List<CategoryEntity> all) {

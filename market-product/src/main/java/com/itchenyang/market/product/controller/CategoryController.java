@@ -41,18 +41,6 @@ public class CategoryController {
     }
 
     /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    // @RequiresPermissions("product:category:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
-
-        return R.ok().put("page", page);
-    }
-
-
-    /**
      * 信息
      */
     @RequestMapping("/info/{catId}")
@@ -86,12 +74,11 @@ public class CategoryController {
     }
 
     /**
-     * 删除
+     * 逻辑删除
      */
     @RequestMapping("/delete")
-    // @RequiresPermissions("product:category:delete")
-    public R delete(@RequestBody Long[] catIds){
-		categoryService.removeByIds(Arrays.asList(catIds));
+    public R deleteByIds(@RequestBody Long[] catIds) {
+        categoryService.removeMenuByIds(Arrays.asList(catIds));
 
         return R.ok();
     }
