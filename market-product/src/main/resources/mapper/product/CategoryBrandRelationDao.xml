@@ -11,6 +11,15 @@
         <result property="brandName" column="brand_name"/>
         <result property="catelogName" column="catelog_name"/>
     </resultMap>
-
+    <update id="updateCasdaCategory">
+        update `pms_category_brand_relation`
+        set `catelog_name` = #{catelogName}
+        where `catelog_id` = #{catelogId};
+    </update>
+    <update id="updateCasdaBrand">
+        update `pms_category_brand_relation`
+        set `brand_name` = #{brandName}
+        where `brand_id` = #{brandId};
+    </update>
 
 </mapper>

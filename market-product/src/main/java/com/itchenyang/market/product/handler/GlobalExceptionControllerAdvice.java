@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+// basePackage下的controller标注的实体类校验器，校验异常都走此处
 @RestControllerAdvice(basePackages = "com.itchenyang.market.product.controller")
 public class GlobalExceptionControllerAdvice {
 

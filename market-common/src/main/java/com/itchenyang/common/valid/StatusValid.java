@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StatusValid {
-    String message() default "{com.itchenyang.common.valid.StatusValid.message}";
+    String message() default "{com.itchenyang.common.valid.StatusValid.message}";   // 从resources下的ValidationMessages.properties取出key的value
 
     Class<?>[] groups() default {};
 

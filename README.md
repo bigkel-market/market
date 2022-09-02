@@ -1,5 +1,5 @@
 # market
-### 启动项目之前，需要执行db下的init_mysql.sql
+### 启动项目之前，需要依次执行db下的sql文件
 
 ### renrenfast为后台后端
 
