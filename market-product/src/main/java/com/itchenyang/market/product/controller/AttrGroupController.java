@@ -1,22 +1,20 @@
 package com.itchenyang.market.product.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import com.itchenyang.market.product.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.product.entity.AttrGroupEntity;
-import com.itchenyang.market.product.service.AttrGroupService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.product.entity.AttrAttrgroupRelationEntity;
+import com.itchenyang.market.product.entity.AttrEntity;
+import com.itchenyang.market.product.entity.AttrGroupEntity;
+import com.itchenyang.market.product.service.AttrGroupService;
+import com.itchenyang.market.product.service.AttrService;
+import com.itchenyang.market.product.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -35,6 +33,9 @@ public class AttrGroupController {
     @Resource
     private CategoryService categoryService;
 
+    @Resource
+    private AttrService attrService;
+
     /**
      * 列表
      */
@@ -43,6 +44,27 @@ public class AttrGroupController {
     public R list(@RequestParam Map<String, Object> params, @PathVariable("catelogId") Long catelogId){
 //        PageUtils page = attrGroupService.queryPage(params);
         PageUtils page = attrGroupService.queryPage(params, catelogId);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 分组关联规则列表
+     */
+    @RequestMapping("/{attrGroupId}/attr/relation")
+    public R listRelation(@PathVariable("attrGroupId") Long attrGroupId) {
+        // 查到当前分组拥有的规则
+        List<AttrEntity> attrs = attrService.selectAttrs(attrGroupId);
+        return R.ok().put("data", attrs);
+    }
+
+    /**
+     * 分组可关联规则列表
+     */
+    @RequestMapping("/{attrGroupId}/noattr/relation")
+    public R listNotRelation(@RequestParam Map<String, Object> params ,
+                             @PathVariable("attrGroupId") Long attrGroupId) {
+        // 查到当前分组能够去关联的规则
+        PageUtils page = attrService.selectNotAttrs(params, attrGroupId);
         return R.ok().put("page", page);
     }
 
@@ -90,6 +112,26 @@ public class AttrGroupController {
     // @RequiresPermissions("product:attrgroup:delete")
     public R delete(@RequestBody Long[] attrGroupIds){
 		attrGroupService.removeByIds(Arrays.asList(attrGroupIds));
+
+        return R.ok();
+    }
+
+    /**
+     * 分组关联规则删除
+     */
+    @RequestMapping("/attr/relation/delete")
+    public R deleteRelations(@RequestBody List<AttrAttrgroupRelationEntity> entities) {
+        attrService.removeRelations(entities);
+
+        return R.ok();
+    }
+
+    /**
+     * 分组关联规则新增
+     */
+    @RequestMapping("/attr/relation")
+    public R addRelations(@RequestBody List<AttrAttrgroupRelationEntity> entities) {
+        attrService.addRelations(entities);
 
         return R.ok();
     }

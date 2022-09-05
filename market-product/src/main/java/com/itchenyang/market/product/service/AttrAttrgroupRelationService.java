@@ -3,7 +3,9 @@ package com.itchenyang.market.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.product.entity.AttrAttrgroupRelationEntity;
+import com.itchenyang.market.product.entity.AttrEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**

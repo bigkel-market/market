@@ -1,19 +1,15 @@
 package com.itchenyang.market.product.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.product.entity.AttrEntity;
-import com.itchenyang.market.product.service.AttrService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.product.service.AttrService;
+import com.itchenyang.market.product.vo.AttrResp;
+import com.itchenyang.market.product.vo.AttrVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -41,6 +37,18 @@ public class AttrController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 基础规格列表
+     */
+    @RequestMapping("/{attrType}/list/{id}")
+    public R AttrBaseList(@RequestParam Map<String, Object> params,
+                          @PathVariable("id") Long catelogId,
+                          @PathVariable("attrType") String attrType) {
+        PageUtils page = attrService.queryBasePage(params, catelogId, attrType);
+
+        return R.ok().put("page", page);
+    }
+
 
     /**
      * 信息
@@ -48,9 +56,9 @@ public class AttrController {
     @RequestMapping("/info/{attrId}")
     // @RequiresPermissions("product:attr:info")
     public R info(@PathVariable("attrId") Long attrId){
-		AttrEntity attr = attrService.getById(attrId);
+		AttrResp attrResp = attrService.getAttrInfo(attrId);
 
-        return R.ok().put("attr", attr);
+        return R.ok().put("attr", attrResp);
     }
 
     /**
@@ -58,9 +66,8 @@ public class AttrController {
      */
     @RequestMapping("/save")
     // @RequiresPermissions("product:attr:save")
-    public R save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
-
+    public R save(@RequestBody AttrVo attr){
+		attrService.saveAttr(attr);
         return R.ok();
     }
 
@@ -69,8 +76,8 @@ public class AttrController {
      */
     @RequestMapping("/update")
     // @RequiresPermissions("product:attr:update")
-    public R update(@RequestBody AttrEntity attr){
-		attrService.updateById(attr);
+    public R update(@RequestBody AttrVo attr){
+		attrService.updateAttr(attr);
 
         return R.ok();
     }
