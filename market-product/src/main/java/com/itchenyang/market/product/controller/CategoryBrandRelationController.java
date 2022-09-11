@@ -1,22 +1,19 @@
 package com.itchenyang.market.product.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.itchenyang.market.product.entity.CategoryEntity;
-import com.itchenyang.market.product.service.BrandService;
-import com.itchenyang.market.product.service.CategoryService;
+import com.itchenyang.common.utils.PageUtils;
+import com.itchenyang.common.utils.R;
+import com.itchenyang.market.product.entity.BrandEntity;
+import com.itchenyang.market.product.entity.CategoryBrandRelationEntity;
+import com.itchenyang.market.product.service.CategoryBrandRelationService;
+import com.itchenyang.market.product.vo.BrandVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.itchenyang.market.product.entity.CategoryBrandRelationEntity;
-import com.itchenyang.market.product.service.CategoryBrandRelationService;
-import com.itchenyang.common.utils.PageUtils;
-import com.itchenyang.common.utils.R;
-
-import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -33,6 +30,21 @@ public class CategoryBrandRelationController {
     private CategoryBrandRelationService categoryBrandRelationService;
 
     /**
+     * 当前分类下的品牌信息
+     */
+    @RequestMapping("/brands/list")
+    public R brandsByCatelog(@RequestParam(value = "catId") Long cateId){
+        List<BrandEntity> brands = categoryBrandRelationService.getBrands(cateId);
+        List<BrandVo> brandInfo = brands.stream().map(one -> {
+            BrandVo vo = new BrandVo();
+            vo.setBrandId(one.getBrandId());
+            vo.setBrandName(one.getName());
+            return vo;
+        }).collect(Collectors.toList());
+        return R.ok().put("data", brandInfo);
+    }
+
+    /**
      * 列表
      */
     @RequestMapping("/list")
@@ -43,9 +55,14 @@ public class CategoryBrandRelationController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 根据品牌id查询其已有的关联的分类
+     * @param brandId
+     * @return
+     */
     @GetMapping("/catelog/list")
     // @RequiresPermissions("product:categorybrandrelation:list")
-    public R list(@RequestParam("brandId") Long brandId){
+    public R relationlist(@RequestParam("brandId") Long brandId){
         List<CategoryBrandRelationEntity> casda = categoryBrandRelationService.list(
                 new QueryWrapper<CategoryBrandRelationEntity>().eq("brand_id", brandId));
 

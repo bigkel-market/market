@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AttrResp extends AttrVo{
+public class AttrRespVo extends AttrVo{
     /**
      * 分类名称
      * 手机/数码/手机

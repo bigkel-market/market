@@ -17,7 +17,7 @@ import com.itchenyang.market.product.entity.AttrGroupEntity;
 import com.itchenyang.market.product.entity.CategoryEntity;
 import com.itchenyang.market.product.service.AttrService;
 import com.itchenyang.market.product.service.CategoryService;
-import com.itchenyang.market.product.vo.AttrResp;
+import com.itchenyang.market.product.vo.AttrRespVo;
 import com.itchenyang.market.product.vo.AttrVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -93,9 +93,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         );
         PageUtils pageUtils = new PageUtils(page);
         // 拿到需要返回给前端的数据
-        List<AttrResp> attrRespList = page.getRecords().stream().map(t -> {
-            AttrResp attrResp = new AttrResp();
-            BeanUtils.copyProperties(t, attrResp);
+        List<AttrRespVo> attrRespVoList = page.getRecords().stream().map(t -> {
+            AttrRespVo attrRespVo = new AttrRespVo();
+            BeanUtils.copyProperties(t, attrRespVo);
             // 查询分组名称
             if (t.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
                 AttrAttrgroupRelationEntity attrgroupRelationEntity = relationDao.selectOne(
@@ -103,33 +103,33 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 if (attrgroupRelationEntity != null) {
                     AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrgroupRelationEntity.getAttrGroupId());
                     if (attrGroupEntity != null) {
-                        attrResp.setGroupName(attrGroupEntity.getAttrGroupName());
+                        attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
                     }
                 }
             }
 
             CategoryEntity categoryEntity = categoryDao.selectById(t.getCatelogId());
             if (categoryEntity != null) {
-                attrResp.setCatelogName(categoryEntity.getName());
+                attrRespVo.setCatelogName(categoryEntity.getName());
             }
-            return attrResp;
+            return attrRespVo;
         }).collect(Collectors.toList());
-        pageUtils.setList(attrRespList);
+        pageUtils.setList(attrRespVoList);
         return pageUtils;
     }
 
     @Override
-    public AttrResp getAttrInfo(Long attrId) {
-        AttrResp attrResp = new AttrResp();
+    public AttrRespVo getAttrInfo(Long attrId) {
+        AttrRespVo attrRespVo = new AttrRespVo();
         AttrEntity attrEntity = this.getById(attrId);
-        BeanUtils.copyProperties(attrEntity, attrResp);
+        BeanUtils.copyProperties(attrEntity, attrRespVo);
 
         // 查询到分类完整路径
         Long catelogId = attrEntity.getCatelogId();
         List<Long> catelogPath = categoryService.findCatelogPath(catelogId);
         CategoryEntity categoryEntity = categoryDao.selectById(catelogId);
-        attrResp.setCatelogPath(catelogPath);
-        attrResp.setCatelogName(categoryEntity.getName());
+        attrRespVo.setCatelogPath(catelogPath);
+        attrRespVo.setCatelogName(categoryEntity.getName());
 
         // 查询分组信息
         if (attrEntity.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {
@@ -138,12 +138,12 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             if (relationEntity != null && relationEntity.getAttrGroupId() != null) {
                 AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(relationEntity.getAttrGroupId());
                 if (attrGroupEntity != null) {
-                    attrResp.setAttrGroupId(attrGroupEntity.getAttrGroupId());
-                    attrResp.setGroupName(attrGroupEntity.getAttrGroupName());
+                    attrRespVo.setAttrGroupId(attrGroupEntity.getAttrGroupId());
+                    attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
                 }
             }
         }
-        return attrResp;
+        return attrRespVo;
     }
 
     @Transactional
@@ -181,9 +181,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         if (attrIds.size() == 0) {
             return null;
         }
-        List<AttrEntity> attrEntities = attrDao.selectBatchIds(attrIds);
 
-        return attrEntities;
+        return attrDao.selectBatchIds(attrIds);
     }
 
     @Override

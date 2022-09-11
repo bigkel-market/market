@@ -1,19 +1,15 @@
 package com.itchenyang.market.coupon.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.coupon.entity.SkuFullReductionEntity;
-import com.itchenyang.market.coupon.service.SkuFullReductionService;
+import com.itchenyang.common.to.SkuReductionTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.coupon.entity.SkuFullReductionEntity;
+import com.itchenyang.market.coupon.service.SkuFullReductionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -29,6 +25,16 @@ import com.itchenyang.common.utils.R;
 public class SkuFullReductionController {
     @Autowired
     private SkuFullReductionService skuFullReductionService;
+
+    /**
+     * 保存满减，优惠等信息
+     */
+    @RequestMapping("/saveinfo")
+    public R saveInfo(@RequestBody SkuReductionTo skuReductionTo){
+        skuFullReductionService.saveSkuReduction(skuReductionTo);
+
+        return R.ok();
+    }
 
     /**
      * 列表

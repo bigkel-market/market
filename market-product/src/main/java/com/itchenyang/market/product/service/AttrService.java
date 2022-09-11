@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.product.entity.AttrAttrgroupRelationEntity;
 import com.itchenyang.market.product.entity.AttrEntity;
-import com.itchenyang.market.product.vo.AttrResp;
+import com.itchenyang.market.product.vo.AttrRespVo;
 import com.itchenyang.market.product.vo.AttrVo;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface AttrService extends IService<AttrEntity> {
 
     PageUtils queryBasePage(Map<String, Object> params, Long catelogId, String attrType);
 
-    AttrResp getAttrInfo(Long attrId);
+    AttrRespVo getAttrInfo(Long attrId);
 
     void updateAttr(AttrVo attr);
 

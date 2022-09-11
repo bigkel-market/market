@@ -8,6 +8,7 @@ import com.itchenyang.market.product.entity.AttrGroupEntity;
 import com.itchenyang.market.product.service.AttrGroupService;
 import com.itchenyang.market.product.service.AttrService;
 import com.itchenyang.market.product.service.CategoryService;
+import com.itchenyang.market.product.vo.AttrGroupAttrsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,16 @@ public class AttrGroupController {
 //        PageUtils page = attrGroupService.queryPage(params);
         PageUtils page = attrGroupService.queryPage(params, catelogId);
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 根据catelogId查询分组以及属性规则
+     * /api/product/attrgroup/{catelogId}/withattr
+     */
+    @RequestMapping("/{catelogId}/withattr")
+    public R AttrDetail(@PathVariable("catelogId") Long catelogId){
+        List<AttrGroupAttrsVo> data = attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data", data);
     }
 
     /**

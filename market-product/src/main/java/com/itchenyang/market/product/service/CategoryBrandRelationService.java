@@ -2,8 +2,10 @@ package com.itchenyang.market.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itchenyang.common.utils.PageUtils;
+import com.itchenyang.market.product.entity.BrandEntity;
 import com.itchenyang.market.product.entity.CategoryBrandRelationEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,5 +20,7 @@ public interface CategoryBrandRelationService extends IService<CategoryBrandRela
     PageUtils queryPage(Map<String, Object> params);
 
     void saveDetail(CategoryBrandRelationEntity categoryBrandRelation);
+
+    List<BrandEntity> getBrands(Long cateId);
 }
 
