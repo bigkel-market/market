@@ -2,7 +2,11 @@ package com.itchenyang.market.ware;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients(basePackages = "com.itchenyang.market.ware.feign")
+@EnableDiscoveryClient
 @SpringBootApplication
 public class MarketWareApplication {
 

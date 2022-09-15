@@ -16,6 +16,11 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <update id="updateStatusByPurchaseId">
+        <foreach collection="purchaseDetailEntities" item="item">
+            update `wms_purchase_detail` set `status` = #{item.status} where `purchase_id` = #{item.purchaseId}
+        </foreach>
+    </update>
 
 
 </mapper>

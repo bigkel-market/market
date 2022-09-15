@@ -1,19 +1,17 @@
 package com.itchenyang.market.ware.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.ware.entity.PurchaseEntity;
-import com.itchenyang.market.ware.service.PurchaseService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.ware.entity.PurchaseEntity;
+import com.itchenyang.market.ware.service.PurchaseService;
+import com.itchenyang.market.ware.vo.MergeVo;
+import com.itchenyang.market.ware.vo.PurchaseDoneVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -29,6 +27,46 @@ import com.itchenyang.common.utils.R;
 public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
+
+    /**
+     * 领取采购单
+     */
+    @PostMapping("/received")
+    public R receiveOrders(@RequestBody List<Long> ids) {
+        purchaseService.receiveOrders(ids);
+        return R.ok();
+    }
+
+    /**
+     * 完成采购
+     */
+    @PostMapping("/done")
+    public R doneOrders(@RequestBody PurchaseDoneVo doneVo) {
+        purchaseService.doneOrder(doneVo);
+        return R.ok();
+    }
+
+    /**
+     * 查询能够合并到单的采购单
+     */
+    @RequestMapping("/unreceive/list")
+    // @RequiresPermissions("ware:purchase:list")
+    public R unreceiveList(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseService.queryPageUnreceive(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 合并采购需求到单
+     */
+    @RequestMapping("/merge")
+    // @RequiresPermissions("ware:purchase:list")
+    public R merge(@RequestBody MergeVo mergeVo){
+        purchaseService.Merge(mergeVo);
+
+        return R.ok();
+    }
 
     /**
      * 列表
