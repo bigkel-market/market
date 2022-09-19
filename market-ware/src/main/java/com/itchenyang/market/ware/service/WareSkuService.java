@@ -1,9 +1,11 @@
 package com.itchenyang.market.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itchenyang.common.to.SkuHasStockTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.ware.entity.WareSkuEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface WareSkuService extends IService<WareSkuEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<SkuHasStockTo> hasStock(List<Long> skuIds);
 }
 
