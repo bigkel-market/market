@@ -1,8 +1,8 @@
 package com.itchenyang.market.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.product.entity.CategoryEntity;
+import com.itchenyang.market.product.entity.Catelog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +23,9 @@ public interface CategoryService extends IService<CategoryEntity> {
     List<Long> findCatelogPath(Long catelogId);
 
     void updateCasda(CategoryEntity category);
+
+    List<CategoryEntity> getLevel1Categorys();
+
+    Map<String, List<Catelog2Vo>> getCatelogJson();
 }
 

@@ -1,28 +1,22 @@
 package com.itchenyang.market.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itchenyang.market.product.dao.CategoryBrandRelationDao;
-import com.itchenyang.market.product.service.CategoryBrandRelationService;
+import com.itchenyang.market.product.dao.CategoryDao;
+import com.itchenyang.market.product.entity.CategoryEntity;
+import com.itchenyang.market.product.entity.Catelog2Vo;
+import com.itchenyang.market.product.service.CategoryService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itchenyang.common.utils.PageUtils;
-import com.itchenyang.common.utils.Query;
-
-import com.itchenyang.market.product.dao.CategoryDao;
-import com.itchenyang.market.product.entity.CategoryEntity;
-import com.itchenyang.market.product.service.CategoryService;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 
 @Service("categoryService")
@@ -73,6 +67,42 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         if (!StringUtils.isBlank(category.getName())) {
             categoryBrandRelationDao.updateCasdaCategory(category.getCatId(), category.getName());
         }
+    }
+
+    @Override
+    public List<CategoryEntity> getLevel1Categorys() {
+        List<CategoryEntity> categoryEntities = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+        return categoryEntities;
+    }
+
+    @Override
+    public Map<String, List<Catelog2Vo>> getCatelogJson() {
+        // 查出所有一级分类
+        List<CategoryEntity> level1Categorys = getLevel1Categorys();
+
+        // 封装返回的数据
+        Map<String, List<Catelog2Vo>> map = level1Categorys.stream().collect(Collectors.toMap(k -> k.getCatId().toString(), v -> {
+            // 查询二级节点
+            List<CategoryEntity> level2Categorys = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", v.getCatId()));
+            List<Catelog2Vo> level2 = new ArrayList<>();
+            if (level2Categorys != null) {
+                 level2 = level2Categorys.stream().map(l2 -> {
+                    // 父级catId, 子级列表, 本级catId, 本级name
+                    Catelog2Vo catelog2Vo = new Catelog2Vo(v.getCatId().toString(), null, l2.getCatId().toString(), l2.getName());
+                    List<CategoryEntity> level3Categorys = baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", l2.getCatId()));
+                    if (level3Categorys != null) {
+                        List<Catelog2Vo.Catelog3Vo> level3 = level3Categorys.stream().map(l3 -> {
+                            Catelog2Vo.Catelog3Vo catelog3Vo = new Catelog2Vo.Catelog3Vo(l2.getCatId().toString(), l3.getCatId().toString(), l3.getName());
+                            return catelog3Vo;
+                        }).collect(Collectors.toList());
+                        catelog2Vo.setCatalog3List(level3);
+                    }
+                    return catelog2Vo;
+                }).collect(Collectors.toList());
+            }
+            return level2;
+        }));
+        return map;
     }
 
     public void findParentPath(Long id, List<Long> catePath) {
