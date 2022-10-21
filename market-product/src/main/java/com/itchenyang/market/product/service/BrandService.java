@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.product.entity.BrandEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,5 +19,7 @@ public interface BrandService extends IService<BrandEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void updateCasda(BrandEntity brand);
+
+    List<BrandEntity> brandsInfo(List<Long> brandIds);
 }
 

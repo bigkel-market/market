@@ -1,23 +1,19 @@
 package com.itchenyang.market.product.app;
 
-import java.util.Arrays;
-import java.util.Map;
-
+import com.itchenyang.common.utils.PageUtils;
+import com.itchenyang.common.utils.R;
 import com.itchenyang.common.valid.AddGroupVaild;
 import com.itchenyang.common.valid.UpdateGroupVaild;
 import com.itchenyang.common.valid.UpdateStatusGroupVaild;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.itchenyang.market.product.entity.BrandEntity;
 import com.itchenyang.market.product.service.BrandService;
-import com.itchenyang.common.utils.PageUtils;
-import com.itchenyang.common.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -54,6 +50,12 @@ public class BrandController {
 		BrandEntity brand = brandService.getById(brandId);
 
         return R.ok().put("brand", brand);
+    }
+
+    @RequestMapping("/brandsInfo")
+    public R brandsInfo(@RequestParam("brandIds") List<Long> brandIds) {
+        List<BrandEntity> brands = brandService.brandsInfo(brandIds);
+        return R.ok().put("brands", brands);
     }
 
     /**

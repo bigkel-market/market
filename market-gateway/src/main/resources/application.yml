@@ -45,6 +45,11 @@ spring:
         - id: bigkel_host_route
           uri: lb://market-product
           predicates:
-            - Host=bigkel.com, **.bigkel.com
+            - Host=bigkel.com
+
+        - id: bigkel_search_route
+          uri: lb://market-search
+          predicates:
+            - Host=search.bigkel.com
 ## 前端访问后端带上/api
 ## http://localhost:8989/api/captcha.jpg     http://localhost:8080/renren-fast/captcha.jpg
