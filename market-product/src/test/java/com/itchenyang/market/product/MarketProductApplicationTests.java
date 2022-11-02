@@ -1,16 +1,28 @@
 package com.itchenyang.market.product;
 
+import com.itchenyang.market.product.service.AttrGroupService;
 import com.itchenyang.market.product.service.BrandService;
+import com.itchenyang.market.product.service.SkuSaleAttrValueService;
+import com.itchenyang.market.product.vo.SkuItemSaleAttrVo;
+import com.itchenyang.market.product.vo.SpuItemAttrGroupVo;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
 class MarketProductApplicationTests {
 
     @Resource
     private BrandService brandService;
+
+    @Autowired
+    private AttrGroupService attrGroupService;
+
+    @Autowired
+    private SkuSaleAttrValueService skuSaleAttrValueService;
 
     @Test
     void contextLoads() {
@@ -65,6 +77,18 @@ class MarketProductApplicationTests {
 //                ossClient.shutdown();
 //            }
 //        }
+    }
+
+    @Test
+    public void TestSpuGroup() {
+        List<SpuItemAttrGroupVo> group = attrGroupService.getAttrGroupWithAttrsBySpuId(3L, 225L);
+        System.out.println(group);
+    }
+
+    @Test
+    public void TestSaleGroup() {
+        List<SkuItemSaleAttrVo> group = skuSaleAttrValueService.getSaleAttrGroupBySpuId(3L);
+        System.out.println(group);
     }
 
 }

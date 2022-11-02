@@ -147,7 +147,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             List<SkuSaleAttrValueEntity> saveAttr = sku.getAttr().stream().map(attr -> {
                 SkuSaleAttrValueEntity entity = new SkuSaleAttrValueEntity();
                 BeanUtils.copyProperties(attr, entity);
-                entity.setSkuId(attr.getAttrId());
+                entity.setSkuId(skuId);
                 return entity;
             }).collect(Collectors.toList());
             skuSaleAttrValueService.saveBatch(saveAttr);
@@ -239,8 +239,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             // hasStock, hotScore
             esModel.setHotScore(0L);
             // 远程调用，库存系统查看是否有库存
-            esModel.setHasStock(finalHasStockMap.getOrDefault(item.getSkuId(), true));
-
+//            esModel.setHasStock(finalHasStockMap.getOrDefault(item.getSkuId(), true));
+            esModel.setHasStock(true);
             // 查询品牌信息和分类信息
             BrandEntity brands = brandService.getById(item.getBrandId());
             esModel.setBrandName(brands.getName());

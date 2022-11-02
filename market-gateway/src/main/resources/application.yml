@@ -45,7 +45,7 @@ spring:
         - id: bigkel_host_route
           uri: lb://market-product
           predicates:
-            - Host=bigkel.com
+            - Host=bigkel.com, item.bigkel.com
 
         - id: bigkel_search_route
           uri: lb://market-search

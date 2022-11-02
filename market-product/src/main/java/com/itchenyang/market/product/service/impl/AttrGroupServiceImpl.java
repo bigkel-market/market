@@ -11,6 +11,7 @@ import com.itchenyang.market.product.entity.AttrGroupEntity;
 import com.itchenyang.market.product.service.AttrGroupService;
 import com.itchenyang.market.product.service.AttrService;
 import com.itchenyang.market.product.vo.AttrGroupAttrsVo;
+import com.itchenyang.market.product.vo.SpuItemAttrGroupVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,11 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             groupAttrsVo.setAttrs(attrs);
             return groupAttrsVo;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+        return baseMapper.getAttrGroupWithAttrsBySpuId(spuId, catalogId);
     }
 
 }

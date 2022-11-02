@@ -3,6 +3,7 @@ package com.itchenyang.market.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.product.entity.SkuInfoEntity;
+import com.itchenyang.market.product.vo.SkuItemVo;
 
 import java.util.Map;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface SkuInfoService extends IService<SkuInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    SkuItemVo itemInfo(Long skuId);
 }
 
