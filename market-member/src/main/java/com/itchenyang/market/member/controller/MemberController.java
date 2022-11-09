@@ -1,19 +1,18 @@
 package com.itchenyang.market.member.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.member.entity.MemberEntity;
-import com.itchenyang.market.member.service.MemberService;
+import com.itchenyang.common.exception.BizCodeEnum;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.member.entity.MemberEntity;
+import com.itchenyang.market.member.exception.PhoneExistException;
+import com.itchenyang.market.member.exception.UserNameExistException;
+import com.itchenyang.market.member.service.MemberService;
+import com.itchenyang.market.member.vo.UserRegisterVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -29,6 +28,22 @@ import com.itchenyang.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    /**
+     * 注册
+     */
+    @PostMapping("/regist")
+    public R regist(@RequestBody UserRegisterVo vo) {
+        try {
+            memberService.regist(vo);
+        } catch (PhoneExistException e) {
+            return R.error(BizCodeEnum.PHONE_EXISTS_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXISTS_EXCEPTION.getMsg());
+        } catch (UserNameExistException e) {
+            return R.error(BizCodeEnum.USER_EXISTS_EXCEPTION.getCode(), BizCodeEnum.USER_EXISTS_EXCEPTION.getMsg());
+        }
+
+        return R.ok();
+    }
 
     /**
      * 列表

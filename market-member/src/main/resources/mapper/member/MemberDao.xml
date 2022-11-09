@@ -27,6 +27,9 @@
         <result property="accessToken" column="access_token"/>
         <result property="expiresIn" column="expires_in"/>
     </resultMap>
+    <select id="getDefaultLevel" resultType="com.itchenyang.market.member.entity.MemberLevelEntity">
+        select * from `ums_member_level` where `default_status` = 1
+    </select>
 
 
 </mapper>

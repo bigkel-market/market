@@ -26,6 +26,7 @@
         <module>renren-generator</module>
         <module>market-common</module>
         <module>market-gateway</module>
+        <module>market-auth-server</module>
     </modules>
 
 </project>

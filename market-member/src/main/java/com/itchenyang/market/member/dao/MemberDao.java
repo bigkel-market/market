@@ -2,6 +2,7 @@ package com.itchenyang.market.member.dao;
 
 import com.itchenyang.market.member.entity.MemberEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.itchenyang.market.member.entity.MemberLevelEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface MemberDao extends BaseMapper<MemberEntity> {
-	
+
+    MemberLevelEntity getDefaultLevel();
 }
