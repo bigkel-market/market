@@ -6,6 +6,7 @@ import com.itchenyang.common.exception.BizCodeEnum;
 import com.itchenyang.common.utils.R;
 import com.itchenyang.market.auth.feign.MemberFeignService;
 import com.itchenyang.market.auth.feign.ThirdPartyFeignService;
+import com.itchenyang.market.auth.vo.UserLoginVo;
 import com.itchenyang.market.auth.vo.UserRegisterVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,27 @@ public class LoginController {
             errors.put("code", "验证码错误");
             redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:http://auth.bigkel.com/register.html";
+        }
+    }
+
+    @PostMapping("/login")
+    public String login(UserLoginVo vo, RedirectAttributes redirectAttributes) {
+        // 调用远程接口登录
+        try {
+            R r = memberFeignService.login(vo);
+            if (r.getCode() == 0) {
+                return "redirect:http://bigkel.com";
+            } else {
+                HashMap<String, String> errors = new HashMap<>();
+                errors.put("msg", r.getData("msg", new TypeReference<String>(){}));
+                redirectAttributes.addFlashAttribute("errors", errors);
+                return "redirect:http://auth.bigkel.com/login.html";
+            }
+        } catch (Exception e) {
+            HashMap<String, String> errors = new HashMap<>();
+            errors.put("msg", "服务异常，请稍后再试");
+            redirectAttributes.addFlashAttribute("errors", errors);
+            return "redirect:http://auth.bigkel.com/login.html";
         }
     }
 }

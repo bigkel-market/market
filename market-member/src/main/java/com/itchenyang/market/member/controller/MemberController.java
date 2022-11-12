@@ -7,6 +7,7 @@ import com.itchenyang.market.member.entity.MemberEntity;
 import com.itchenyang.market.member.exception.PhoneExistException;
 import com.itchenyang.market.member.exception.UserNameExistException;
 import com.itchenyang.market.member.service.MemberService;
+import com.itchenyang.market.member.vo.UserLoginVo;
 import com.itchenyang.market.member.vo.UserRegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,15 @@ import java.util.Map;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    public R login(@RequestBody UserLoginVo vo) {
+        Boolean status = memberService.login(vo);
+        return status ? R.ok() : R.error(BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getCode(), BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getMsg());
+    }
 
     /**
      * 注册

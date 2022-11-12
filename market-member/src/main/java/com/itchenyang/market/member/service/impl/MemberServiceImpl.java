@@ -11,6 +11,7 @@ import com.itchenyang.market.member.entity.MemberLevelEntity;
 import com.itchenyang.market.member.exception.PhoneExistException;
 import com.itchenyang.market.member.exception.UserNameExistException;
 import com.itchenyang.market.member.service.MemberService;
+import com.itchenyang.market.member.vo.UserLoginVo;
 import com.itchenyang.market.member.vo.UserRegisterVo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,21 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         entity.setPassword(encode);
 
         baseMapper.insert(entity);
+    }
+
+    @Override
+    public Boolean login(UserLoginVo vo) {
+        String key = vo.getLoginacct();
+        String password = vo.getPassword();
+
+        MemberEntity entity = baseMapper.selectOne(new QueryWrapper<MemberEntity>().eq("username", key).or().eq("mobile", key));
+        if (entity == null) {
+            return false;
+        } else {
+            String savePassword = entity.getPassword();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            return encoder.matches(password, savePassword);
+        }
     }
 
     private void checkUserNameExist(String userName) {
