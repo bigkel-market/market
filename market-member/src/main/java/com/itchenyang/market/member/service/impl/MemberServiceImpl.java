@@ -43,7 +43,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         checkUserNameExist(vo.getUserName());
         checkPhoneExist(vo.getPhone());
         entity.setUsername(vo.getUserName());
-        entity.setPassword(vo.getPhone());
+        entity.setMobile(vo.getPhone());
+        entity.setNickname(vo.getUserName());
 
         // 设置密码
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -54,17 +55,17 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
     }
 
     @Override
-    public Boolean login(UserLoginVo vo) {
+    public MemberEntity login(UserLoginVo vo) {
         String key = vo.getLoginacct();
         String password = vo.getPassword();
 
         MemberEntity entity = baseMapper.selectOne(new QueryWrapper<MemberEntity>().eq("username", key).or().eq("mobile", key));
         if (entity == null) {
-            return false;
+            return null;
         } else {
             String savePassword = entity.getPassword();
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            return encoder.matches(password, savePassword);
+            return encoder.matches(password, savePassword) ? entity : null;
         }
     }
 

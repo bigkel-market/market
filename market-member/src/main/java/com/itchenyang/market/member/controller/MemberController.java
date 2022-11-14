@@ -35,8 +35,8 @@ public class MemberController {
      */
     @PostMapping("/login")
     public R login(@RequestBody UserLoginVo vo) {
-        Boolean status = memberService.login(vo);
-        return status ? R.ok() : R.error(BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getCode(), BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getMsg());
+        MemberEntity entity = memberService.login(vo);
+        return entity != null ? R.ok().put("data", entity) : R.error(BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getCode(), BizCodeEnum.LOGIN_ACCOUNT_PASSWORD_INVALID.getMsg());
     }
 
     /**

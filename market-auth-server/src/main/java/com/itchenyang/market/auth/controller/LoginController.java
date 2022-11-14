@@ -6,6 +6,7 @@ import com.itchenyang.common.exception.BizCodeEnum;
 import com.itchenyang.common.utils.R;
 import com.itchenyang.market.auth.feign.MemberFeignService;
 import com.itchenyang.market.auth.feign.ThirdPartyFeignService;
+import com.itchenyang.common.vo.MemberRespVo;
 import com.itchenyang.market.auth.vo.UserLoginVo;
 import com.itchenyang.market.auth.vo.UserRegisterVo;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -113,12 +115,24 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/login.html")
+    public String loginPage(HttpSession session) {
+        Object attribute = session.getAttribute(AuthServerConstant.LOGIN_USER);
+        if (attribute != null) {
+            return "redirect:http://bigkel.com";
+        }
+        return "login";
+    }
+
     @PostMapping("/login")
-    public String login(UserLoginVo vo, RedirectAttributes redirectAttributes) {
+    public String login(UserLoginVo vo, RedirectAttributes redirectAttributes, HttpSession session) {
         // 调用远程接口登录
         try {
             R r = memberFeignService.login(vo);
             if (r.getCode() == 0) {
+                MemberRespVo data = r.getData("data", new TypeReference<MemberRespVo>() {
+                });
+                session.setAttribute(AuthServerConstant.LOGIN_USER, data);
                 return "redirect:http://bigkel.com";
             } else {
                 HashMap<String, String> errors = new HashMap<>();

@@ -18,7 +18,7 @@ public class MarketWebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         HashMap<String, String> viewMapping = new HashMap<String, String>() {
             {
-                put("login.html", "login");
+//                put("login.html", "login");
                 put("register.html", "register");
             }
         };
