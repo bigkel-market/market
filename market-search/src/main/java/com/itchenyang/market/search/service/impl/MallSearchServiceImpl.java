@@ -172,8 +172,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         sourceBuilder.aggregation(attr_agg);
 
         System.out.println("构建的DSL语句: " + sourceBuilder.toString());
-        SearchRequest request = new SearchRequest(new String[]{EsConstant.PRODUCT_INDEX}, sourceBuilder);
-        return request;
+        return new SearchRequest(new String[]{EsConstant.PRODUCT_INDEX}, sourceBuilder);
     }
 
     /**

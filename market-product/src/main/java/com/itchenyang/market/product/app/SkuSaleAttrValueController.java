@@ -1,6 +1,7 @@
 package com.itchenyang.market.product.app;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,14 @@ import com.itchenyang.common.utils.R;
 public class SkuSaleAttrValueController {
     @Autowired
     private SkuSaleAttrValueService skuSaleAttrValueService;
+
+    /**
+     * 获取当前商品的属性
+     */
+    @RequestMapping("/{skuId}")
+    List<String> getSkuSaleAttrValues(@PathVariable("skuId") Long skuId) {
+        return skuSaleAttrValueService.getSkuSaleAttrValues(skuId);
+    }
 
     /**
      * 列表
