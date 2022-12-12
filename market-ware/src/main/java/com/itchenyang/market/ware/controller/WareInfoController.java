@@ -4,6 +4,7 @@ import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
 import com.itchenyang.market.ware.entity.WareInfoEntity;
 import com.itchenyang.market.ware.service.WareInfoService;
+import com.itchenyang.market.ware.vo.FareVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,18 @@ import java.util.Map;
 public class WareInfoController {
     @Autowired
     private WareInfoService wareInfoService;
+
+    /**
+     * 获取运费信息
+     * @return
+     */
+    @GetMapping(value = "/fare")
+    public R getFare(@RequestParam("addrId") Long addrId) {
+
+        FareVo fare = wareInfoService.getFare(addrId);
+
+        return R.ok().put("fare",fare);
+    }
 
     /**
      * 列表

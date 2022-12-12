@@ -3,6 +3,7 @@ package com.itchenyang.market.cart.service;
 import com.itchenyang.market.cart.vo.CartItemVo;
 import com.itchenyang.market.cart.vo.CartVo;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,4 +24,6 @@ public interface CartService {
     void countItem(Long skuId, Integer num);
 
     void deleteItem(Long skuId);
+
+    List<CartItemVo> getCurrentUserCartItems();
 }

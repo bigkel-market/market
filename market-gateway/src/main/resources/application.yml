@@ -61,5 +61,10 @@ spring:
           uri: lb://market-cart
           predicates:
             - Host=cart.bigkel.com
+
+        - id: bigkel_order_route
+          uri: lb://market-order
+          predicates:
+            - Host=order.bigkel.com
 ## 前端访问后端带上/api
 ## http://localhost:8989/api/captcha.jpg     http://localhost:8080/renren-fast/captcha.jpg

@@ -1,19 +1,16 @@
 package com.itchenyang.market.member.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.member.entity.MemberReceiveAddressEntity;
-import com.itchenyang.market.member.service.MemberReceiveAddressService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.member.entity.MemberReceiveAddressEntity;
+import com.itchenyang.market.member.service.MemberReceiveAddressService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -29,6 +26,14 @@ import com.itchenyang.common.utils.R;
 public class MemberReceiveAddressController {
     @Autowired
     private MemberReceiveAddressService memberReceiveAddressService;
+
+    /**
+     * 获取地址信息
+     */
+    @GetMapping("/{memberId}/address")
+    public List<MemberReceiveAddressEntity> getCurrentUserAddress(@PathVariable("memberId") Long memberId) {
+        return memberReceiveAddressService.list(new QueryWrapper<MemberReceiveAddressEntity>().eq("member_id", memberId));
+    }
 
     /**
      * 列表

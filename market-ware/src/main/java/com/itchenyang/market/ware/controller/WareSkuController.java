@@ -1,10 +1,13 @@
 package com.itchenyang.market.ware.controller;
 
+import com.itchenyang.common.exception.BizCodeEnum;
+import com.itchenyang.common.exception.NoStockException;
 import com.itchenyang.common.to.SkuHasStockTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
 import com.itchenyang.market.ware.entity.WareSkuEntity;
 import com.itchenyang.market.ware.service.WareSkuService;
+import com.itchenyang.market.ware.vo.WareSkuLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,18 @@ public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
 
+    /**
+     * 锁定库存
+     */
+    @PostMapping("/lock/stock")
+    public R lockOrderStock(@RequestBody WareSkuLockVo lockVo) {
+        try {
+            wareSkuService.lockOrderStock(lockVo);
+            return R.ok();
+        } catch (NoStockException e) {
+            return R.error(BizCodeEnum.NO_STOCK_EXCEPTION.getCode(), e.getMessage());
+        }
+    }
     /**
      * 是否有库存
      */
