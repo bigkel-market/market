@@ -1,7 +1,9 @@
 package com.itchenyang.market.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itchenyang.common.to.OrderTo;
 import com.itchenyang.common.to.SkuHasStockTo;
+import com.itchenyang.common.to.mq.StockLockedTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.ware.entity.WareSkuEntity;
 import com.itchenyang.market.ware.vo.WareSkuLockVo;
@@ -23,5 +25,9 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     List<SkuHasStockTo> hasStock(List<Long> skuIds);
 
     Boolean lockOrderStock(WareSkuLockVo lockVo);
+
+    void unlockStock(StockLockedTo to);
+
+    void unlockStock(OrderTo to);
 }
 

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itchenyang.common.exception.NoStockException;
+import com.itchenyang.common.to.OrderTo;
 import com.itchenyang.common.to.SkuHasStockTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.Query;
@@ -26,6 +27,8 @@ import com.itchenyang.market.order.service.OrderService;
 import com.itchenyang.market.order.to.OrderCreateTo;
 import com.itchenyang.market.order.to.SpuInfoVo;
 import com.itchenyang.market.order.vo.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -69,6 +72,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -160,6 +166,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
                 R r = wareFeignService.lockOrderStock(lockVo);
                 if (r.getCode() == 0) {
+//                    int i = 10 / 0;
+                    // 订单创建成功 发送给MQ
+                    rabbitTemplate.convertAndSend("order-event-exchange", "order.create.order", orderCreateTo.getOrder());
+
                     responseVo.setCode(0);
                     responseVo.setOrder(orderCreateTo.getOrder());
                 } else {
@@ -173,6 +183,31 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             responseVo.setCode(1);  // 令牌验证不通过
         }
         return responseVo;
+    }
+
+    @Override
+    public OrderEntity getOrderByOrderSn(String orderSn) {
+        OrderEntity entity = baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
+
+        return entity;
+    }
+
+    @Override
+    public void closeOrder(OrderEntity entity) {
+        // 查询订单状态
+        OrderEntity curOrder = baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", entity.getOrderSn()));
+        if (curOrder.getStatus().equals(OrderStatusEnum.CREATE_NEW.getCode())) {
+            // 关单
+            OrderEntity update = new OrderEntity();
+            update.setId(curOrder.getId());
+            update.setStatus(OrderStatusEnum.CANCLED.getCode());
+            baseMapper.updateById(update);
+
+            // 发给MQ，用于库存解锁
+            OrderTo orderTo = new OrderTo();
+            BeanUtils.copyProperties(curOrder, orderTo);
+            rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderTo);
+        }
     }
 
     /**

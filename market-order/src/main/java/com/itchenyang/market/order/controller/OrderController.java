@@ -1,19 +1,14 @@
 package com.itchenyang.market.order.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itchenyang.market.order.entity.OrderEntity;
-import com.itchenyang.market.order.service.OrderService;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.R;
+import com.itchenyang.market.order.entity.OrderEntity;
+import com.itchenyang.market.order.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 
 
@@ -29,6 +24,17 @@ import com.itchenyang.common.utils.R;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
+    /**
+     * 根据订单编号查询订单状态
+     * @param orderSn
+     * @return
+     */
+    @GetMapping(value = "/status/{orderSn}")
+    public R getOrderStatus(@PathVariable("orderSn") String orderSn) {
+        OrderEntity orderEntity = orderService.getOrderByOrderSn(orderSn);
+        return R.ok().put("data", orderEntity);
+    }
 
     /**
      * 列表

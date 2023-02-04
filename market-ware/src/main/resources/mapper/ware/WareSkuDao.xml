@@ -17,6 +17,11 @@
         where sku_id = #{skuId} and ware_id = #{wareId} and stock - stock_locked > #{count}
     </update>
 
+    <update id="unLockStock">
+        update wms_ware_sku set stock_locked = stock_locked - #{count}
+        where sku_id = #{skuId} and ware_id = #{wareId}
+    </update>
+
     <select id="getStockBySkuId" resultType="java.lang.Integer">
         select SUM(`stock`-`stock_locked`) from `wms_ware_sku` where `sku_id` = #{skuId}
     </select>
