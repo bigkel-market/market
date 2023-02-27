@@ -73,5 +73,10 @@ spring:
           uri: lb://market-order
           predicates:
             - Host=order.bigkel.com
+
+        - id: bigkel_seckill_route
+          uri: lb://market-seckill
+          predicates:
+            - Host=seckill.bigkel.com
 ## 前端访问后端带上/api
 ## http://localhost:8989/api/captcha.jpg     http://localhost:8080/renren-fast/captcha.jpg

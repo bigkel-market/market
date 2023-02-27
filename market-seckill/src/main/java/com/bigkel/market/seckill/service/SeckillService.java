@@ -1,11 +1,17 @@
 package com.bigkel.market.seckill.service;
 
+import com.bigkel.market.seckill.to.SeckillSkuRedisTo;
+
+import java.util.List;
+
 public interface SeckillService {
 
     /**
      * 上架三天需要秒杀的商品
      */
     void uploadSeckillSkuLatest3Days();
+
+    List<SeckillSkuRedisTo> getCurrentSeckillSkus();
 
 //    List<SeckillSkuRedisTo> getCurrentSeckillSkus();
 //
