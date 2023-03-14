@@ -1,6 +1,7 @@
 package com.itchenyang.market.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itchenyang.common.to.mq.SeckillOrderTo;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.market.order.entity.OrderEntity;
 import com.itchenyang.market.order.vo.OrderConfirmVo;
@@ -28,5 +29,7 @@ public interface OrderService extends IService<OrderEntity> {
     OrderEntity getOrderByOrderSn(String orderSn);
 
     void closeOrder(OrderEntity entity);
+
+    void createSeckillOrder(SeckillOrderTo orderTo);
 }
 

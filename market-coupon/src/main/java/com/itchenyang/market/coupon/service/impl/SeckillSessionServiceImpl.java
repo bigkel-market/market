@@ -65,8 +65,7 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionDao, Se
         LocalDateTime start = LocalDateTime.of(now, min);
 
         //格式化时间
-        String startFormat = start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return startFormat;
+        return start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**
@@ -80,8 +79,7 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionDao, Se
         LocalDateTime end = LocalDateTime.of(plus, max);
 
         //格式化时间
-        String endFormat = end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return endFormat;
+        return end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 }

@@ -1,15 +1,19 @@
 package com.itchenyang.market.product.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itchenyang.common.utils.PageUtils;
 import com.itchenyang.common.utils.Query;
+import com.itchenyang.common.utils.R;
 import com.itchenyang.market.product.dao.SkuInfoDao;
 import com.itchenyang.market.product.entity.SkuImagesEntity;
 import com.itchenyang.market.product.entity.SkuInfoEntity;
 import com.itchenyang.market.product.entity.SpuInfoDescEntity;
+import com.itchenyang.market.product.feign.SeckillFeignService;
 import com.itchenyang.market.product.service.*;
+import com.itchenyang.market.product.vo.SeckillSkuVo;
 import com.itchenyang.market.product.vo.SkuItemSaleAttrVo;
 import com.itchenyang.market.product.vo.SkuItemVo;
 import com.itchenyang.market.product.vo.SpuItemAttrGroupVo;
@@ -40,6 +44,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Autowired
     private ThreadPoolExecutor executor;
+
+    @Autowired
+    private SeckillFeignService seckillFeignService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -92,8 +99,18 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             skuItemVo.setGroupAttrs(value);
         }, executor);
 
+        // 6、查询当前商品的秒杀信息
+        CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
+            R r = seckillFeignService.getSkuSeckillNotice(skuId);
+            if (r.getCode() == 0) {
+                SeckillSkuVo seckillSkuVo = r.getData("data", new TypeReference<SeckillSkuVo>() {
+                });
+                skuItemVo.setSeckillSkuVo(seckillSkuVo);
+            }
+        }, executor);
+
         try {
-            CompletableFuture.allOf(saleFuture, descFuture, groupFuture, imageFuture).get();
+            CompletableFuture.allOf(saleFuture, descFuture, groupFuture, imageFuture, seckillFuture).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
