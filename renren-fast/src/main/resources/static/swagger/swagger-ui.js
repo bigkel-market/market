@@ -6749,7 +6749,7 @@ var Operation = module.exports = function (parent, scheme, operationId, httpMeth
       this.host = window.location.host;
     }
     else {
-      this.host = 'localhost';
+      this.host = '192.168.56.10';
     }
   }
   this.parameterMacro = parent.parameterMacro || function (operation, parameter) {
@@ -22789,8 +22789,8 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
     if ('validatorUrl' in opts.swaggerOptions) {
       // Validator URL specified explicitly
       this.model.validatorUrl = opts.swaggerOptions.validatorUrl;
-    } else if (this.model.url.indexOf('localhost') > 0 || this.model.url.indexOf('127.0.0.1') > 0) {
-      // Localhost override
+    } else if (this.model.url.indexOf('192.168.56.10') > 0 || this.model.url.indexOf('127.0.0.1') > 0) {
+      // 192.168.56.10 override
       this.model.validatorUrl = null;
     } else {
       this.model.validatorUrl = '//online.swagger.io/validator';

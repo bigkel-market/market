@@ -4,7 +4,7 @@
  Source Server         : 10.43.1.52
  Source Server Type    : MySQL
  Source Server Version : 50729
- Source Host           : 10.43.1.52:3306
+ Source Host           : 10.43.1.52:13306
  Source Schema         : mall_sms
 
  Target Server Type    : MySQL

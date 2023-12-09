@@ -36,8 +36,8 @@ class MarketProductApplicationTests {
         // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
 //        String endpoint = "oss-cn-hangzhou.aliyuncs.com";
 //        // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-//        String accessKeyId = "LTAI5t74C4VapddhyHTd9ZBm";
-//        String accessKeySecret = "lNV7P4yRnxhKmQ4lH4j9eHS3iyIapN";
+//        String accessKeyId = "";
+//        String accessKeySecret = "";
 //        // 填写Bucket名称，例如examplebucket。
 //        String bucketName = "bigkel-market";
 //        // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。

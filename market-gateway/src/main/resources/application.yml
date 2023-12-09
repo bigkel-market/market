@@ -79,4 +79,4 @@ spring:
           predicates:
             - Host=seckill.bigkel.com
 ## 前端访问后端带上/api
-## http://localhost:8989/api/captcha.jpg     http://localhost:8080/renren-fast/captcha.jpg
+## http://192.168.56.10:8989/api/captcha.jpg     http://192.168.56.10:8080/renren-fast/captcha.jpg

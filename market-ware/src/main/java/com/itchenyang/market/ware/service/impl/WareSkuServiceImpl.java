@@ -200,7 +200,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                 .eq("lock_status", 1));
         for (WareOrderTaskDetailEntity item : taskDetailEntities) {
             // Long skuId,Long wareId,Integer num,Long taskDetailId
-            unLockStock(item.getSkuId(), item.getWareId(), item.getSkuNum(), taskId);
+            unLockStock(item.getSkuId(), item.getWareId(), item.getSkuNum(), item.getId());
         }
     }
 
